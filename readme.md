@@ -25,5 +25,7 @@ Laravel is accessible, yet powerful, providing tools needed for large, robust ap
 On clone:
 - composer install
 - npm install
-optional:
+
+optional (once per env):
+
 - composer global require phpunit/phpunit
