@@ -36,6 +36,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+		if (app()->environment() === 'testing') {
+			throw $exception;
+		};
+
         parent::report($exception);
     }
 
