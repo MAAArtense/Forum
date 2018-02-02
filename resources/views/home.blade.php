@@ -7,14 +7,15 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Dashboard</div>
 
-                <div class="panel-body">
+
+				{{-- <div class="panel-body">
                     @foreach ($threads as $thread)
                       <article>
                           <h4> {{ $thread->title }} </h4>
                           <div class=body> {{ $thread->body }} </div>
                       </article>
                     @endforeach
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

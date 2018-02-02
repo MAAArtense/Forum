@@ -32,6 +32,9 @@ class ReadThreadsTest extends TestCase
 
 	public function test_a_user_can_read_replies_that_are_associated_with_a_thread()
 	{
+		//een user moet ingelogd zijn
+		$this->be(factory('App\User')->create());
+		//moet die een thrread
 		$reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
 
 		$response = $this->get($this->thread->path());
