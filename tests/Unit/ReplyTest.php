@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ReplyTest extends TestCase
 {
-	use DatabaseMigrations;
+	//use DatabaseMigrations;
 
 	protected $reply;
 
@@ -15,7 +15,7 @@ class ReplyTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->reply = factory('App\Reply')->create();
+		$this->reply = create('App\Reply');
 	}
 
     function test_if_it_has_a_creator()

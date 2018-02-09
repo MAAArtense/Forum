@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ThreadTest extends TestCase
 {
-	use DatabaseMigrations;
+	//use DatabaseMigrations;
 
 	protected $threat;
 
@@ -15,7 +15,7 @@ class ThreadTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->thread = factory('App\Thread')->create();
+		$this->thread = create('App\Thread');
 	}
 
     function test_a_threat_has_replies()

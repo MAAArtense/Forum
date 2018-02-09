@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ReadThreadsTest extends TestCase
 {
-    use DatabaseMigrations;
+    //use DatabaseMigrations;
 
 	protected $thread;
 
@@ -15,7 +15,7 @@ class ReadThreadsTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->thread = factory('App\Thread')->create();
+		$this->thread = create('App\Thread');
 	}
 
     public function test_a_user_can_view_all_threads()
@@ -33,9 +33,9 @@ class ReadThreadsTest extends TestCase
 	public function test_a_user_can_read_replies_that_are_associated_with_a_thread()
 	{
 		//een user moet ingelogd zijn
-		$this->be(factory('App\User')->create());
+		$this->be(create('App\User'));
 		//moet die een thrread
-		$reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
+		$reply = create('App\Reply', ['thread_id' => $this->thread->id]);
 
 		$response = $this->get($this->thread->path());
 		$response->assertSee($reply->body);
