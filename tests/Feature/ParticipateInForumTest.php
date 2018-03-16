@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class ParticipateInForum extends TestCase
 {
@@ -28,5 +28,16 @@ class ParticipateInForum extends TestCase
 
 		$response = $this->get($thread->path());
 		$response->assertSee($reply->body);
+    }
+
+    public function test_a_reply_requires_a_body ()
+    {
+        $this->withExceptionHandling()->signIn();
+
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', ['body' => null]);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }
