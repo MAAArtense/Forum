@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ReadThreadsTest extends TestCase
 {
@@ -34,10 +33,20 @@ class ReadThreadsTest extends TestCase
 	{
 		//een user moet ingelogd zijn
 		$this->be(create('App\User'));
-		//moet die een thrread
 		$reply = create('App\Reply', ['thread_id' => $this->thread->id]);
 
 		$response = $this->get($this->thread->path());
 		$response->assertSee($reply->body);
 	}
+
+	public function test_a_user_can_filter_threads_according_to_a_channel()
+    {
+        $channel = create('App\Channel');
+        $threadInChannel = create('App\Thread', ['channel_id' => $channel->id]);
+        $threadNotInChannel = create('App\Thread');
+
+        $this->get('/threads/' . $channel->slug)
+            ->assertSee($threadInChannel->title)
+            ->assertDontSee($threadNotInChannel->title);
+    }
 }

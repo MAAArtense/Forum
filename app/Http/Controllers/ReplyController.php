@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
-use App\Channel;
-use Illuminate\Http\Request;
 
 class ReplyController extends Controller
 {
@@ -22,7 +20,6 @@ class ReplyController extends Controller
 		$thread->addReply([
 			'body' => request('body'),
 			'user_id' => auth()->id()
-
 		]);
 
 		return back();
