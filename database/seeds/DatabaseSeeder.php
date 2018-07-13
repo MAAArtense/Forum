@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Factories as henk;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,16 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name' => 'David van Pelt',
-            'email' => 'david@unitas.nl',
-            'password' => bcrypt('secret'),
-        ]);
-        DB::table('users')->insert([
+        factory(App\User::class)->create([
             'name' => 'Michael Maartense',
             'email' => 'michael@unitas.nl',
             'password' => bcrypt('secret'),
         ]);
+
+        factory(App\User::class)->create([
+            'name' => 'David van Pelt',
+            'email' => 'david@unitas.nl',
+            'password' => bcrypt('secret'),
+        ]);
+
         // So quickly create 50 users and give them some random posts & threads
         $this->users = factory(App\User::class, 50)->create();
         $this->userArraySize = count($this->users) - 1;
