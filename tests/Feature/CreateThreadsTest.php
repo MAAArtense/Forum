@@ -6,43 +6,43 @@ use Tests\TestCase;
 
 class CreateThreadsTest extends TestCase
 {
-	function test_guests_may_not_create_threads ()
-	{
-		$this->withExceptionHandling();
+    function test_guests_may_not_create_threads()
+    {
+        $this->withExceptionHandling();
 
-		$this->post('/threads')
-			->assertRedirect('login');
+        $this->post('/threads')
+            ->assertRedirect('login');
 
-		$this->get('/threads/create')
-			->assertRedirect('login');
-	}
+        $this->get('/threads/create')
+            ->assertRedirect('login');
+    }
 
-    function test_an_authenticated_user_can_create_new_forum_threads ()
-	{
-		$this->signIn();
+    function test_an_authenticated_user_can_create_new_forum_threads()
+    {
+        $this->signIn();
 
-		$thread = make('App\Thread');
+        $thread = make('App\Thread');
 
-		$response = $this->post('/threads', $thread->toArray());
+        $response = $this->post('/threads', $thread->toArray());
 
-		$this->get($response->headers->get('location'))
-			->assertSee($thread->title)
-			->assertSee($thread->body);
-	}
+        $this->get($response->headers->get('location'))
+            ->assertSee($thread->title)
+            ->assertSee($thread->body);
+    }
 
-	function test_a_thread_requires_a_title ()
-	{
-	    $this->publishThread(['title' => null])
-			->assertSessionHasErrors('title');
-	}
+    function test_a_thread_requires_a_title()
+    {
+        $this->publishThread(['title' => null])
+            ->assertSessionHasErrors('title');
+    }
 
-    function test_a_thread_requires_a_body ()
+    function test_a_thread_requires_a_body()
     {
         $this->publishThread(['body' => null])
             ->assertSessionHasErrors('body');
     }
 
-    function test_a_thread_requires_a_valid_channel ()
+    function test_a_thread_requires_a_valid_channel()
     {
         factory('App\Channel', 2)->create();
 
@@ -53,21 +53,22 @@ class CreateThreadsTest extends TestCase
             ->assertSessionHasErrors('channel_id');
     }
 
-    function test_guests_cannot_delete_threads()
+    function test_unauthorized_users_may_not_delete_threads()
     {
         $this->withExceptionHandling();
         $thread = create('App\Thread');
 
-        $response = $this->delete($thread->path());
+        $this->delete($thread->path())->assertRedirect('/login');
 
-        $response->assertRedirect('/login');
+        $this->signIn();
+        $this->delete($thread->path())->assertStatus(403);
     }
 
-    function test_a_thread_can_be_deleted()
+    function test_authorized_users_can_delete_threads()
     {
         $this->signIn();
 
-        $thread = create('App\Thread');
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
         $reply = create('App\Reply', ['thread_id' => $thread->id]);
 
         $this->json('DELETE', $thread->path());
