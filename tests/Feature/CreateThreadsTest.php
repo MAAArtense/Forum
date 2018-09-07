@@ -2,10 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Activity;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class CreateThreadsTest extends TestCase
 {
+    use DatabaseMigrations;
+
     function test_guests_may_not_create_threads()
     {
         $this->withExceptionHandling();
@@ -67,14 +71,16 @@ class CreateThreadsTest extends TestCase
     function test_authorized_users_can_delete_threads()
     {
         $this->signIn();
-
         $thread = create('App\Thread', ['user_id' => auth()->id()]);
         $reply = create('App\Reply', ['thread_id' => $thread->id]);
 
-        $this->json('DELETE', $thread->path());
+        $response = $this->json('DELETE', $thread->path());
+        $response->assertStatus(204);
 
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+
+        $this->assertEquals(0, Activity::count());
     }
 
     function publishThread($overrides)

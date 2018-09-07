@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Filters\ThreadFilters;
 use App\Channel;
-use App\Reply;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -64,7 +63,8 @@ class ThreadController extends Controller
             'body' => $request->body
         ]);
 
-        return redirect($thread->path());
+        return redirect($thread->path())
+            ->with('flash', 'Your thread has been published!');
     }
 
     /**
@@ -114,17 +114,10 @@ class ThreadController extends Controller
     public function destroy($channel, Thread $thread)
     {
         $this->authorize('update', $thread);
-
-        if($thread->user_id != auth()->id()){
-            abort(403, 'You do not have permission to do this.');
-        }
-        $thread->replies()->delete();
         $thread->delete();
-
         if (request()->wantsJson()) {
             return response([], 204);
         }
-
         return redirect('/threads');
     }
 
