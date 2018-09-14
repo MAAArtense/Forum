@@ -27,7 +27,7 @@
 
         methods: {
             hide() {
-                setTimeout(() => {
+                setTimeout(() => {p
                     this.show = false;
                 }, 3000);
             },

@@ -43341,6 +43341,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             setTimeout(function () {
+                p;
                 _this2.show = false;
             }, 3000);
         },
